@@ -32,19 +32,8 @@ fi
 url="$1"
 folder_id=$(echo "$url" | grep -o '[-_a-zA-Z0-9]\{28,\}')
 
-# Get the list of files in the folder
-echo "Fetching list of files in folder..."
-gdown --folder --id "$folder_id" --dry-run > file_list.txt
+# Download the entire folder using gdown
+echo "Downloading entire folder..."
+gdown --folder --id "$folder_id"
 
-# Download each file listed by gdown
-while IFS= read -r line; do
-    # Extract the file ID and name
-    file_id=$(echo "$line" | grep -o '[-_a-zA-Z0-9]\{28,\}')
-    file_name=$(echo "$line" | grep -oP '(?<=Saving to: ).*')
-
-    # Download the file
-    download_file "$file_id" "$file_name"
-done < <(grep "gdown" file_list.txt)
-
-# Clean up
-rm -f cookies.txt file_list.txt
+echo "Download completed."
